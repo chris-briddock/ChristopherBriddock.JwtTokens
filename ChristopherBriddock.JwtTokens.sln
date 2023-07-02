@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChristopherBriddock.JwtTokens", "ChristopherBriddock.JwtTokens\ChristopherBriddock.JwtTokens.csproj", "{8CE791AB-C7FF-4D43-8DA2-E1B0F48977A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChristopherBriddock.JwtTokens.Tests", "ChristopherBriddock.JwtTokens.Tests\ChristopherBriddock.JwtTokens.Tests.csproj", "{20302D8C-1DEA-42CB-B0FE-0F7707973241}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8CE791AB-C7FF-4D43-8DA2-E1B0F48977A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CE791AB-C7FF-4D43-8DA2-E1B0F48977A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CE791AB-C7FF-4D43-8DA2-E1B0F48977A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CE791AB-C7FF-4D43-8DA2-E1B0F48977A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20302D8C-1DEA-42CB-B0FE-0F7707973241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20302D8C-1DEA-42CB-B0FE-0F7707973241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20302D8C-1DEA-42CB-B0FE-0F7707973241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20302D8C-1DEA-42CB-B0FE-0F7707973241}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {68DFB52E-A950-4584-AD18-1F5D573169E2}
+	EndGlobalSection
+EndGlobal
