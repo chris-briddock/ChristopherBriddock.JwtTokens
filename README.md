@@ -32,7 +32,7 @@ To run the existing unit tests use 'dotnet test'
 
 ### Adding JWT Middleware to ASP.NET Core Pipeline
 
-To use the `JwtMiddleware` in an ASP.NET Core application, register it in the `Configure` method of the `Startup.cs` class:
+To use the `JwtMiddleware` in an ASP.NET Core application (mainly an identity server), register it in the `Configure` method of the `Startup.cs` class:
 
 ```csharp
     public class Startup
