@@ -1,76 +1,76 @@
-using ChristopherBriddock.JwtTokens.Tests.Mocks;
-using Moq;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-
 namespace ChristopherBriddock.JwtTokens.Tests;
 
-public sealed class JsonWebTokensTests
+public class JsonWebTokensTests
 {
-    [Fact]
-    public void GenerateJwtToken_ReturnsValidJwtToken()
+    private readonly JsonWebTokens _jsonWebTokens;
+    private readonly string _email = "christopherbriddock@gmail.com";
+    private readonly string _jwtSecret = "veryStrongKeyUsedForSigningJWTs123456789";
+    private readonly string _issuer = "https://auth.example.com";
+    private readonly string _audience = "https://api.example.com";
+    private readonly int _expires = 120;
+    private readonly string _subject = "John Doe";
+
+    public JsonWebTokensTests()
     {
-        // Arrange
-        IList<Claim> claims = new List<Claim>
-        {
-            new Claim("claimType1", "claimValue1"),
-            new Claim("claimType2", "claimValue2"),
-        };
-        string jwtSecret = "your_jwt_secret";
-        string issuer = "your_issuer";
-        string audience = "your_audience";
-        string subject = "your_subject";
+        _jsonWebTokens = new JsonWebTokens();
+    }
 
-        TokenHandlerMock tokenHandlerMock = new();
-
-        TokenValidationParametersMock tokenValidationParamsMock = new();
-        tokenHandlerMock.MockWriteToken("mocked_jwt_token");
-
-        IJsonWebTokens sut = new JsonWebTokens(tokenHandlerMock.Object, tokenValidationParamsMock.Object);
-
+    [Fact]
+    public async Task TryCreateTokenAsync_ShouldCreateToken_WhenValidParametersAreProvided()
+    {
         // Act
-        string jwtToken = sut.GenerateJwtToken(claims, jwtSecret, issuer, audience, subject);
+        var sut = await _jsonWebTokens.TryCreateTokenAsync(_email,
+                                                           _jwtSecret,
+                                                           _issuer,
+                                                           _audience,
+                                                           _expires,
+                                                           _subject);
 
         // Assert
-        Assert.Equal("mocked_jwt_token", jwtToken);
-        tokenHandlerMock.Verify(th => th.WriteToken(It.IsAny<JwtSecurityToken>()), Times.Once);
+        Assert.True(sut.Success);
+        Assert.NotNull(sut.Token);
+        Assert.Null(sut.Error);
     }
     [Fact]
-    public void IsValid_ValidToken_ReturnsTrue()
+    public async Task TryValidateTokenAsync_ShouldValidateToken_WhenValidTokenIsProvided()
     {
         // Arrange
-        var token = "valid_token";
-
-        var tokenHandlerMock = new TokenHandlerMock();
-        var tokenValidationParams = new TokenValidationParametersMock();
-        var sut = new JsonWebTokens(tokenHandlerMock.Object, tokenValidationParams.Object);
-
-        tokenHandlerMock.MockValidateToken(token);
+        var sut = new JsonWebTokens();
+        var jwtResult = await sut.TryCreateTokenAsync(_email,
+                                                      _jwtSecret,
+                                                      _issuer,
+                                                      _audience,
+                                                      _expires,
+                                                      _subject);
+        var validToken = jwtResult.Token;
 
         // Act
-        var result = sut.IsValid(token);
+        var result = await sut.TryValidateTokenAsync(validToken,
+                                                     _jwtSecret,
+                                                     _issuer,
+                                                     _audience);
 
         // Assert
-        Assert.True(result);
-        tokenHandlerMock.Verify();
+        Assert.True(result.Success);
+        Assert.Null(result.Error);
+        Assert.Equal(validToken, result.Token);
     }
     [Fact]
-    public void IsValid_InvalidToken_ReturnsFalse()
+    public async Task TryValidateTokenAsync_ShouldFail_WhenInvalidTokenIsProvided()
     {
         // Arrange
-        var token = "invalid_token";
-
-        var tokenHandlerMock = new TokenHandlerMock();
-        var tokenValidationParams = new TokenValidationParametersMock();
-        var sut = new JsonWebTokens(tokenHandlerMock.Object, tokenValidationParams.Object);
-
-        tokenHandlerMock.MockValidateTokenThrows(token);
+        var sut = new JsonWebTokens();
+        var invalidToken = "invalidToken";
 
         // Act
-        var result = sut.IsValid(token);
+        var result = await sut.TryValidateTokenAsync(invalidToken, _jwtSecret, _issuer, _audience);
 
         // Assert
-        Assert.False(result);
-        tokenHandlerMock.Verify();
+        Assert.False(result.Success);
     }
+
+
+
+
+
 }
