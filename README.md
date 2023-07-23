@@ -20,7 +20,7 @@ This library relies on the following packages:
 
 ### Installation
 
-This can be installed as a NuGet package [here](https://www.nuget.org/packages/ChristopherBriddock.AspNetCore.Extensions/)
+This can be installed as a NuGet package [here](https://www.nuget.org/packages/ChristopherBriddock.JwtTokens/)
 Or you can download or fork this and customize to your liking.
 
 ## Testing
