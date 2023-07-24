@@ -39,11 +39,11 @@ To use the `JwtMiddleware` in an ASP.NET Core application (mainly an identity se
     {
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // other middleware registrations...
-            
-            // Add the JWT Middleware
-            app.UseMiddleware<JwtMiddleware>();
-            
-            // other middleware registrations...
+            // to use this middleware when the token endpoint is called.
+           app.UseWhen(context => context.Request.Path.StartsWithSegments("/token"), appBuilder =>
+        {
+            appBuilder.UseMiddleware<JwtMiddleware>();
+        });
         }
     }
+
