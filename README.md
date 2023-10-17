@@ -15,8 +15,9 @@ This repository contains a simple library for managing JSON Web Tokens (JWTs) in
 This library relies on the following packages:
 
 - System.IdentityModel.Tokens.Jwt
+- Microsoft.Extensions.Configuration.Abstractions
 - Microsoft.IdentityModel.Tokens
-- Microsoft.Extensions.Configuration
+- Microsoft.AspNetCore.Authentication.JwtBearer
 
 ### Installation
 
@@ -25,25 +26,17 @@ Or you can download or fork this and customize to your liking.
 
 ## Testing
 
-This library has been designed to be testable, and unit tests can be written using xUnit and Moq 
-
+This library has been designed to be testable, and unit tests can be written using xUnit and Moq
 To run the existing unit tests use 'dotnet test'
+
 ## Usage
 
 ### Adding JWT Middleware to ASP.NET Core Pipeline
 
-To use the `JwtMiddleware` in an ASP.NET Core application (mainly an identity server), register it in the `Configure` method of the `Startup.cs` class:
+To use the `JwtMiddleware` in an ASP.NET Core application (mainly an identity server), register it in `Program.cs` class:
 
 ```csharp
-    public class Startup
-    {
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            // to use this middleware when the token endpoint is called.
-           app.UseWhen(context => context.Request.Path.StartsWithSegments("/token"), appBuilder =>
-        {
-            appBuilder.UseMiddleware<JwtMiddleware>();
-        });
-        }
-    }
-
+    // call this extension method within the service collection section.
+    services.AddCustomJwtAuth();
+    // call this extension mathod within the application builder section.
+    app.UseJwtGenerator();

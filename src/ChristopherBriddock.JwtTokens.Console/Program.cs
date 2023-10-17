@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using ChristopherBriddock.JwtTokens;
+﻿using ChristopherBriddock.JwtTokens;
 using ChristopherBriddock.JwtTokens.Console;
 using Ninject;
 
@@ -18,7 +17,7 @@ string token = (await jsonWebTokens.TryCreateTokenAsync("myemail@email.com",
                                                         secret,
                                                         issuer,
                                                         audience,
-                                                        60,
+                                                        "60",
                                                         subject)).Token;
 bool isValid = (await jsonWebTokens.TryValidateTokenAsync(token,
                                                           secret,

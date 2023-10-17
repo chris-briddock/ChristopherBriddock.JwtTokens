@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using ChristopherBriddock.JwtTokens.Exceptions;
+using ChristopherBriddock.JwtTokens.Models;
 
 namespace ChristopherBriddock.JwtTokens
 {
@@ -15,19 +17,20 @@ namespace ChristopherBriddock.JwtTokens
     public class JsonWebTokens : IJsonWebTokens
     {
         /// <summary>
-        /// Creates a JSON Web Token (JWT) asynchronously.
+        /// Tries to create a JWT (JSON Web Token) asynchronously.
         /// </summary>
-        /// <param name="claims">The claims to include in the JWT.</param>
-        /// <param name="jwtSecret">The secret key for signing the JWT.</param>
+        /// <param name="email">The email of the token's recipient.</param>
+        /// <param name="jwtSecret">The secret key used to sign the JWT.</param>
         /// <param name="issuer">The issuer of the JWT.</param>
-        /// <param name="audience">The audience of the JWT.</param>
+        /// <param name="audience">The intended audience of the JWT.</param>
+        /// <param name="expires">The expiration date and time of the JWT.</param>
         /// <param name="subject">The subject of the JWT.</param>
-        /// <returns>A JwtResult that indicates the result of the JWT creation operation. If successful, the JwtResult includes the JWT as a string. If an error occurs, the JwtResult includes an error message.</returns>
+        /// <returns>A <see cref="JwtResult"/> containing the result of the token creation.</returns>
         public async Task<JwtResult> TryCreateTokenAsync(string email,
                                                    string jwtSecret,
                                                    string issuer,
                                                    string audience,
-                                                   int expires,
+                                                   string expires,
                                                    string subject)
         {
             JwtResult result = new JwtResult();
@@ -41,15 +44,16 @@ namespace ChristopherBriddock.JwtTokens
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, subject),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToString(), ClaimValueTypes.Integer64),
+                    new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToString(), ClaimValueTypes.String),
                     new Claim(JwtRegisteredClaimNames.Email, email)
 
                 };
-                var tokenDescriptor = new JwtSecurityToken(
+                var expiryMinutesToAdd = Convert.ToInt16(expires);
+                JwtSecurityToken tokenDescriptor = new JwtSecurityToken(
                     issuer: issuer,
                     audience: audience,
                     claims: claims,
-                    expires: DateTime.UtcNow.AddMinutes(expires),
+                    expires: DateTime.UtcNow.AddMinutes(expiryMinutesToAdd),
                     signingCredentials: new SigningCredentials(
                         new SymmetricSecurityKey(key),
                         SecurityAlgorithms.HmacSha256Signature
@@ -65,20 +69,20 @@ namespace ChristopherBriddock.JwtTokens
                 throw;
             }
             return await Task.FromResult(result);
-        }
+        } 
 
         /// <summary>
-        /// Validates a JSON Web Token (JWT) asynchronously.
+        /// Tries to validate a JWT (JSON Web Token) asynchronously.
         /// </summary>
         /// <param name="token">The JWT to validate.</param>
-        /// <param name="jwtSecret">The JWT Secret used for signing the JWT.</param>
-        /// <param name="issuer">The Issuer of the JWT.</param>
-        /// <param name="audience">The Audience of the JWT.</param>
-        /// <returns>A JwtResult that indicates the result of the JWT validation operation. If successful, the JwtResult includes the validated JWT as a string. If an error occurs, the JwtResult includes an error message.</returns>
+        /// <param name="jwtSecret">The secret key used to validate the JWT's signature.</param>
+        /// <param name="issuer">The expected issuer of the JWT.</param>
+        /// <param name="audience">The expected audience of the JWT.</param>
+        /// <returns>A <see cref="JwtResult"/> containing the result of the token validation.</returns>
         public async Task<JwtResult> TryValidateTokenAsync(string token,
-                                                           string jwtSecret,
-                                                           string issuer,
-                                                           string audience)
+                                                   string jwtSecret,
+                                                   string issuer,
+                                                   string audience)
         {
             JwtResult result = new JwtResult();
             try
@@ -97,27 +101,24 @@ namespace ChristopherBriddock.JwtTokens
                     ClockSkew = TimeSpan.Zero
                 };
 
-                TokenValidationResult validationResult = await tokenHandler.ValidateTokenAsync(token,
-                                                                                               tokenValidationParameters);
+                TokenValidationResult validationResult = await tokenHandler.ValidateTokenAsync(token, tokenValidationParameters);
+
+
+                // If the validation succeeds, the JWT is both well-formed and has a valid signature.
                 if (validationResult.IsValid)
                 {
                     result.Success = true;
                     result.Token = token;
                 }
-                else
-                {
-                    result.Success = false;
-                }
 
-                return await Task.FromResult(result);
+                return result;
             }
-            catch (ValidateJwtException ex)
+            catch (SecurityTokenException ex)
             {
                 result.Error = ex.Message;
                 result.Success = false;
                 throw ex;
             }
         }
-
     }
 }

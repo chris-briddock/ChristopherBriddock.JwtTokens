@@ -7,7 +7,7 @@ public class JsonWebTokensTests
     private readonly string _jwtSecret = "veryStrongKeyUsedForSigningJWTs123456789";
     private readonly string _issuer = "https://auth.example.com";
     private readonly string _audience = "https://api.example.com";
-    private readonly int _expires = 120;
+    private readonly string _expires = 120.ToString();
     private readonly string _subject = "John Doe";
 
     public JsonWebTokensTests()
