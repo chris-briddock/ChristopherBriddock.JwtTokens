@@ -27,11 +27,11 @@ namespace ChristopherBriddock.JwtTokens
         /// <param name="subject">The subject of the JWT.</param>
         /// <returns>A <see cref="JwtResult"/> containing the result of the token creation.</returns>
         public async Task<JwtResult> TryCreateTokenAsync(string email,
-                                                   string jwtSecret,
-                                                   string issuer,
-                                                   string audience,
-                                                   string expires,
-                                                   string subject)
+                                                         string jwtSecret,
+                                                         string issuer,
+                                                         string audience,
+                                                         string expires,
+                                                         string subject)
         {
             JwtResult result = new JwtResult();
             try
@@ -44,7 +44,7 @@ namespace ChristopherBriddock.JwtTokens
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, subject),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToString(), ClaimValueTypes.String),
+                    new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
                     new Claim(JwtRegisteredClaimNames.Email, email)
 
                 };
