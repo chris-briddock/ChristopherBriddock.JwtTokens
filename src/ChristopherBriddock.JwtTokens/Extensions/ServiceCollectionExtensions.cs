@@ -17,7 +17,7 @@ namespace ChristopherBriddock.JwtTokens.Extensions
         {
 
             ArgumentNullException.ThrowIfNull(services, nameof(services));
-
+            services.TryAddSingleton<IJsonWebTokens, JsonWebTokens>();
             services.TryAddSingleton<IConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>();
             services.AddAuthentication(opt =>
             {
