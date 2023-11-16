@@ -33,7 +33,7 @@ namespace ChristopherBriddock.JwtTokens
                                                          string expires,
                                                          string subject)
         {
-            JwtResult result = new JwtResult();
+            JwtResult result = new();
             try
             {
 
@@ -42,14 +42,14 @@ namespace ChristopherBriddock.JwtTokens
 
                 IList<Claim> claims = new List<Claim>()
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, subject),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Email, email)
+                    new(JwtRegisteredClaimNames.Sub, subject),
+                    new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
+                    new(JwtRegisteredClaimNames.Email, email)
 
                 };
                 var expiryMinutesToAdd = Convert.ToInt16(expires);
-                JwtSecurityToken tokenDescriptor = new JwtSecurityToken(
+                JwtSecurityToken tokenDescriptor = new(
                     issuer: issuer,
                     audience: audience,
                     claims: claims,
@@ -84,7 +84,7 @@ namespace ChristopherBriddock.JwtTokens
                                                    string issuer,
                                                    string audience)
         {
-            JwtResult result = new JwtResult();
+            JwtResult result = new();
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -117,7 +117,7 @@ namespace ChristopherBriddock.JwtTokens
             {
                 result.Error = ex.Message;
                 result.Success = false;
-                throw ex;
+                throw;
             }
         }
     }
