@@ -80,9 +80,9 @@ namespace ChristopherBriddock.JwtTokens
         /// <param name="audience">The expected audience of the JWT.</param>
         /// <returns>A <see cref="JwtResult"/> containing the result of the token validation.</returns>
         public async Task<JwtResult> TryValidateTokenAsync(string token,
-                                                   string jwtSecret,
-                                                   string issuer,
-                                                   string audience)
+                                                           string jwtSecret,
+                                                           string issuer,
+                                                           string audience)
         {
             JwtResult result = new();
             try

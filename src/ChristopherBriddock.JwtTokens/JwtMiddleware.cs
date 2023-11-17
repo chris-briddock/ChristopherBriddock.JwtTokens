@@ -77,7 +77,7 @@ namespace ChristopherBriddock.JwtTokens
 
                     if (isValid)
                     {
-                        context.Response.Headers.Add("Authorization", $"Bearer {result.Token}");
+                        context.Response.Headers.Append("Authorization", $"Bearer {result.Token}");
                     }
                 }
                 await _next(context);

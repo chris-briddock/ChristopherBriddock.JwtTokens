@@ -13,7 +13,7 @@ namespace ChristopherBriddock.JwtTokens
     /// </summary>
     public class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions>
     {
-        private readonly IConfiguration _configuration;
+        private IConfiguration Configuration { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigureJwtBearerOptions"/> class.
@@ -21,7 +21,7 @@ namespace ChristopherBriddock.JwtTokens
         /// <param name="configuration">The application configuration.</param>
         public ConfigureJwtBearerOptions(IConfiguration configuration)
         {
-            _configuration = configuration;
+            Configuration = configuration;
         }
 
         /// <summary>
@@ -38,9 +38,9 @@ namespace ChristopherBriddock.JwtTokens
         public void Configure(JwtBearerOptions options)
         {
             // Retrieve the JWT secret from the application configuration
-            string issuer = _configuration["Jwt:Issuer"]!;
-            string audience = _configuration["Jwt:Audience"]!;
-            string jwtSecret = _configuration["Jwt:Secret"]!;
+            string issuer = Configuration["Jwt:Issuer"]!;
+            string audience = Configuration["Jwt:Audience"]!;
+            string jwtSecret = Configuration["Jwt:Secret"]!;
             
             if (string.IsNullOrWhiteSpace(jwtSecret))
             {

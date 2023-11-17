@@ -18,7 +18,12 @@ namespace ChristopherBriddock.JwtTokens
         /// <param name="expires">The expiration date and time of the JWT.</param>
         /// <param name="subject">The subject of the JWT.</param>
         /// <returns>A <see cref="JwtResult"/> containing the result of the token creation.</returns>
-        Task<JwtResult> TryCreateTokenAsync(string email, string jwtSecret, string issuer, string audience, string expires, string subject);
+        Task<JwtResult> TryCreateTokenAsync(string email,
+                                            string jwtSecret,
+                                            string issuer,
+                                            string audience,
+                                            string expires,
+                                            string subject);
 
         /// <summary>
         /// Tries to validate a JWT (JSON Web Token) asynchronously.
@@ -28,6 +33,9 @@ namespace ChristopherBriddock.JwtTokens
         /// <param name="issuer">The expected issuer of the JWT.</param>
         /// <param name="audience">The expected audience of the JWT.</param>
         /// <returns>A <see cref="JwtResult"/> containing the result of the token validation.</returns>
-        Task<JwtResult> TryValidateTokenAsync(string token, string jwtSecret, string issuer, string audience);
+        Task<JwtResult> TryValidateTokenAsync(string token,
+                                              string jwtSecret,
+                                              string issuer,
+                                              string audience);
     }
 }

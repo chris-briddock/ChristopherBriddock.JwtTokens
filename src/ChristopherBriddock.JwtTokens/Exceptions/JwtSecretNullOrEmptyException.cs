@@ -3,7 +3,6 @@ using System.Runtime.Serialization;
 
 namespace ChristopherBriddock.JwtTokens.Exceptions
 {
-    [Serializable]
     internal class JwtSecretNullOrEmptyException : Exception
     {
         /// <summary>
